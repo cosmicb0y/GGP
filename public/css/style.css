@@ -1,8 +1,45 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.container {
+  width: 70%;
+  height: 70%;
+  margin: 40px auto;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
 }
 
 a {
   color: #00B7FF;
+}
+
+.outer {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+.inner {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.centered {
+  position: relative;
+  display: inline-block;
+
+  width: 50%;
+  padding: 1em;
+}
+
+.idInput {
+    margin: 5px auto;
+}
+
+.passwordInput {
+    margin: 5px auto;
+}
+
+.footer {
+    margin: 10px auto;
 }

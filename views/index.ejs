@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/css/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+    <head>
+        <title>세상의 모든 프로젝트</title>
+        <link rel='stylesheet' href='/css/style.css' />
+        <script src="app.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="outer">
+                <div class="inner">
+                    <div class="centered">
+                        <div class="header">
+                            <h1>세상의 모든 프로젝트</h1>
+                        </div>
+                        <div class="loginForm">
+                            <div class="idInput">
+                                <input id="id" value="" type="text" placeholder="ID" style="width: 100%">
+                            </div>
+                            <div class="passwordInput">
+                                <input id="pw" value="" type="password" placeholder="Password" style="width: 100%">
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <button name="signup" style="width: 100%">처음이신가요?</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
