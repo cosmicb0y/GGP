@@ -7,6 +7,13 @@
 var app = require('../app');
 var debug = require('debug')('ggp:server');
 var http = require('http');
+var https = require('https');
+var fs = require('fs');
+
+var options = {
+    key: fs.readFileSync('key/key.pem'),
+    cert: fs.readFileSync('key/cert.pem')
+}
 
 /**
  * Get port from environment and store in Express.
@@ -14,18 +21,21 @@ var http = require('http');
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
+var portS = normalizePort(process.env.SPORT || '3001');
 
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app);
+var serverSSL = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
 server.listen(port);
+serverSSL.listen(portS);
 server.on('error', onError);
 server.on('listening', onListening);
 
