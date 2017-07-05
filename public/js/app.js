@@ -1,5 +1,7 @@
-$(function() {
-    $('.footer').animate({
-        top: '200%'
+$(function(){
+    $('.signup').click(function() {
+        $('.footer').animate({
+            top: '200%'
+        });
     });
 });
