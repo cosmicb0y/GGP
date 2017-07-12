@@ -13,9 +13,10 @@ html {
 body {
     height: 100%;
     width: 100%;
-    background-image: url('http://placekitten.com/1280/960');
+    background-image: url('/img/main.png');
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center center;
 }
 
 a {
@@ -23,16 +24,13 @@ a {
 }
 
 
-
-.loginForm {
+.header {
+    text-align: center;
     margin: 5px auto;
+    padding: 5px auto;
 }
 
-.idInput {
-    margin: 5px auto;
-}
-
-.passwordInput {
+.loginForm, .signinForm {
     margin: 5px auto;
 }
 
@@ -44,13 +42,15 @@ a {
 }
 
 input[type=text] {
-   padding: 5px;
-   width: 100%;
+    margin: 5px auto;
+    padding: 5px;
+    width: 100%;
 }
 
 input[type=password] {
-   padding: 5px;
-   width: 100%;
+    margin: 5px auto;
+    padding: 5px;
+    width: 100%;
 }
 
 button {
