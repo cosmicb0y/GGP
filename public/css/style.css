@@ -19,6 +19,9 @@ body {
     background-position: center center;
 }
 
+h1 {
+    color: white;
+}
 a {
   color: #00B7FF;
 }
