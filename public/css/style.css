@@ -56,8 +56,16 @@ input[type=password] {
     width: 100%;
 }
 
-button {
-    padding: 5px;
+
+input[type=submit] {
     width: 100%;
     margin: 5px auto;
+    padding: 5px;
+}
+
+button {
+    padding: 10px auto;
+    width: 100%;
+    margin: 5px auto;
+    height: 25px;
 }
