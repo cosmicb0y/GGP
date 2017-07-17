@@ -36,6 +36,31 @@ router.get('/', function(req, res, next) {
 router.get('/test', function(req, res, next) {
   res.send('respond with a resource GET. this is /api/test');
 });
+router.post('/login', function(req, res, next) {
+    var result = '';
+    for(i in req.body){
+        result = result + "received " + i + " : " + req.body[i] + "<br>";
+        console.log(i + " " + req.body[i]);
+    }
+    User.find({email: req.body.id}, {_id: 0, password: 1}, (err, users) => {
+        if(err){
+            return res.status(500).json({error: err});
+        }
+        if(users.length === 0){
+            return res.status(404).json({error: 'user not found'});
+        }
+        //for(i in users[0]){
+        //    console.log(i + users[0][i]);
+        //}
+        if(users[0].password === req.body.pw){
+            res.json({success: true});
+        }else{
+            res.json({success: false});
+        }
+        //res.send(users[0].password);
+    });
+    //res.send(result);
+});
 router.post('/register', function(req, res, next) {
     //result = '';
     var user = new User();
@@ -54,7 +79,7 @@ router.post('/register', function(req, res, next) {
                 res.json({success: false});
                 return;
             }
-            res.json({isuccess: true, id: user.email});
+            res.json({success: true, id: user.email});
         });
     }else{
         res.json({success: false, reason: "PW Confirm Not Match"});
