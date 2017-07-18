@@ -24,6 +24,12 @@ passwordConfirmInput.setAttribute("name", "pwConfirm");
 passwordConfirmInput.setAttribute("value", "");
 passwordConfirmInput.setAttribute("placeholder", "비밀번호 확인");
 
+var nicknameInput = document.createElement("input");
+nicknameInput.setAttribute("type", "text");
+nicknameInput.setAttribute("name", "nickname");
+nicknameInput.setAttribute("value", "");
+nicknameInput.setAttribute("placeholder", "닉네임");
+
 var univInput = document.createElement("input");
 univInput.setAttribute("type", "text");
 univInput.setAttribute("name", "univ");
@@ -89,6 +95,7 @@ submitInput.setAttribute("value", "이제, 시작해보죠");
 signupForm.append(emailInput);
 signupForm.append(passwordInput);
 signupForm.append(passwordConfirmInput);
+signupForm.append(nicknameInput);
 signupForm.append(univInput);
 signupForm.append(majorInput);
 
