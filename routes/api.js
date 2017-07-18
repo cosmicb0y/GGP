@@ -23,46 +23,67 @@ router.post('/login', function(req, res, next) {
         if(users.length === 0){
             return res.status(404).json({error: 'user not found'});
         }
-        //for(i in users[0]){
-        //    console.log(i + users[0][i]);
-        //}
         if(users[0].password === req.body.pw){
             res.json({success: true});
         }else{
             res.json({success: false});
         }
-        //res.send(users[0].password);
     });
-    //res.send(result);
 });
 router.post('/register', function(req, res, next) {
-    //result = '';
     var user = new DB.User();
     user.email = req.body.email;
+    user.password = req.body.pw;//need to be hashed
     user.nickname = "Nooo!!";
     user.category = req.body.category;
     user.university = req.body.univ;
     user.major = req.body.major;
-    user.password = req.body.pw;//need to be hashed
+    user.valid = false;
     var pwConfirm = req.body.pwConfirm;
 
-    if(user.password == pwConfirm){
-        user.save((err)=>{
-            if(err){
-                console.error(err);
-                res.json({success: false});
-                return;
-            }
-            res.json({success: true, id: user.email});
-        });
-    }else{
-        res.json({success: false, reason: "PW Confirm Not Match"});
-    }
-    /*for(i in req.body){
-        result = result + "received " + i + " : " + req.body[i] + "<br>";
-        console.log(i + " " + req.body[i]);
-    }*/
-    //res.send(result);
+    //Fail Reason needed?? Talk with HW.
+    DB.User.find({email: user.email},{_id: 0, email: 1, nickname: 1, password: 1}, (err, users)=>{
+        if(err){
+            res.json({success: false, reason: "Unknown Error: " + err});
+        }else if(users.length > 0){//Email already used!
+            res.json({success: false, reason: "ID(email) Already Exists"});
+        }else if(user.password != pwConfirm){//confirm password!
+            res.json({success: false, reason: "PW Confirm Not Match"});
+        }else if(!validatePW(user.password)){//password condition check
+            res.json({success: false, reason: "PW Validation Failed"});
+        }else if(!validateCategory(user.category)){
+        }else if(!validateUniv(user.university)){
+        }else if(!validateMajor(user.major)){
+        }else{
+            user.save((err)=>{
+                if(err){
+                    console.error(err);
+                    res.json({success: false, reason: "Unknown Error: " + err});
+                    return;
+                }
+                res.json({success: true, id: user.email});
+            });
+        }
+
+    });
 });
+
+function validatePW(pw){
+    return true;
+}
+
+function validateCategory(cg){
+    return true;
+}
+
+function validateUniv(univ){
+    return true;
+}
+
+function validateMajor(major){
+    return true;
+}
+
+
 
 module.exports = router;

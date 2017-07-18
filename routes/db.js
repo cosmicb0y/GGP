@@ -22,6 +22,7 @@ var userSchema = new Schema({
     category: String,
     university: String,
     major: String,
+    valid: { type: Boolean, default: false },
     reg_date: { type: Date, default: Date.now }
 }, {strict: false, autoindex: true});
 DB.User = mongoose.model('user', userSchema);

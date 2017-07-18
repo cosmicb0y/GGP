@@ -4,6 +4,7 @@
 ## Requirements
 * Node.js
 * npm
+* MongoDB
 
 ## Run
 1. Clone this project.  
@@ -36,8 +37,13 @@
 > HTML files come to here. but rename to .ejs file.  
 > uses EJS view engine.  
 
+* key/  
+> For SSL.  
+
 * app.js
-> App setting. Don't use now.  
+> App setting. Should be set to use https(ssl).  
 
 * package.json
 > For dependencies and project inormation.  
+* package-lock.json
+> For dependencies. auto!
