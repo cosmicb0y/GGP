@@ -3,6 +3,11 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var DB = require('./db');
 
+//Passport test!!
+var passport = require('passport');
+var localStrategy = require('passport-local').Strategy;
+//
+
 /* Routing~~~ */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource GET. this is /api');
@@ -10,7 +15,38 @@ router.get('/', function(req, res, next) {
 router.get('/test', function(req, res, next) {
   res.send('respond with a resource GET. this is /api/test');
 });
-router.post('/login', function(req, res, next) {
+router.get('/pptest', function(req, res, next) {
+    var session = req.session;
+    session.username = req.query.name;
+    return res.json(session);
+});
+router.get('/cookie', function(req, res, next) {
+    return res.json(req.session);
+});
+router.get('/logout', function(req, res, next) {
+    //console.log(req.session);
+    if(req.session.username){
+        //res.clearCookie('name');
+        //*
+        req.session.destroy(function(err){
+            console.log('test');
+            if(err){
+                console.log(err);
+                return res.json({success: false});
+            }
+        });
+        //*/
+    }
+    return res.redirect('/');
+});
+
+router.post('/login', passport.authenticate('local', {
+    failureRedirect: '/api/test'}), (req, res)=>{
+        console.log('auth Test!!!!');
+        res.redirect('/api/cookie');
+    });
+    //, function(req, res, next) {
+    /*
     var result = '';
     for(i in req.body){
         result = result + "received " + i + " : " + req.body[i] + "<br>";
@@ -29,7 +65,8 @@ router.post('/login', function(req, res, next) {
             res.json({success: false});
         }
     });
-});
+    //*/
+//});
 router.post('/register', function(req, res, next) {
     var user = new DB.User();
     user.email = req.body.email;
