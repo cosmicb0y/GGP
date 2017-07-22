@@ -44,7 +44,7 @@ passport.deserializeUser(function(user, done){
     console.log('deserialize');
     done(null, user);
 });
-passport.use(new localStrategy({
+passport.use('login', new localStrategy({
     usernameField: 'id',
     passwordField: 'pw',
     passReqToCallback : true

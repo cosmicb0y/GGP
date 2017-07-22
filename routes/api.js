@@ -5,7 +5,6 @@ var DB = require('./db');
 
 //Passport test!!
 var passport = require('passport');
-var localStrategy = require('passport-local').Strategy;
 //
 
 /* Routing~~~ */
@@ -40,7 +39,7 @@ router.get('/logout', function(req, res, next) {
     return res.redirect('/');
 });
 
-router.post('/login', passport.authenticate('local', {
+router.post('/login', passport.authenticate('login', {
     failureRedirect: '/api/test'}), (req, res)=>{
         console.log('auth Test!!!!');
         res.redirect('/api/cookie');
