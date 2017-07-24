@@ -2,8 +2,7 @@ var DB = {};
 
 var mongoose = require('mongoose');
 
-//*
-//DB Connecting/Setting. Move to other module later.
+//DB Connecting/Setting.
 var db = mongoose.connection;
 db.on('error', console.error);
 db.once('open', () => {
@@ -15,7 +14,6 @@ var Schema = mongoose.Schema;
 
 //USER
 var userSchema = new Schema({
-    //id: Schema.Types.ObjectId,
     email: String,
     password: String,//need to be hashed
     nickname: String,
@@ -25,9 +23,9 @@ var userSchema = new Schema({
     valid: { type: Boolean, default: false },
     reg_date: { type: Date, default: Date.now }
 }, {strict: false, autoindex: true});
+userSchema.methods.pwCheck = function(pw){
+    return this.password == pw;
+}
 DB.User = mongoose.model('user', userSchema);
-//User.find({email: req.body.id}, {_id: 0, password: 1}, (err, users) => {
-//var user = new User();, user.asd = asdf ~~~~
-//user.save((err)=>{
 
 module.exports = DB;

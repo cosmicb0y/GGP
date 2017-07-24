@@ -2,10 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var DB = require('./db');
-
-//Passport test!!
-var passport = require('passport');
-//
+var passport = require('./passport');
 
 /* Routing~~~ */
 router.get('/', function(req, res, next) {
@@ -23,10 +20,7 @@ router.get('/cookie', function(req, res, next) {
     return res.json(req.session);
 });
 router.get('/logout', function(req, res, next) {
-    //console.log(req.session);
-    if(req.session.username){
-        //res.clearCookie('name');
-        //*
+    if(req.session.passport){
         req.session.destroy(function(err){
             console.log('test');
             if(err){
@@ -34,7 +28,6 @@ router.get('/logout', function(req, res, next) {
                 return res.json({success: false});
             }
         });
-        //*/
     }
     return res.redirect('/');
 });
@@ -44,28 +37,6 @@ router.post('/login', passport.authenticate('login', {
         console.log('auth Test!!!!');
         res.redirect('/api/cookie');
     });
-    //, function(req, res, next) {
-    /*
-    var result = '';
-    for(i in req.body){
-        result = result + "received " + i + " : " + req.body[i] + "<br>";
-        console.log(i + " " + req.body[i]);
-    }
-    DB.User.find({email: req.body.id}, {_id: 0, password: 1}, (err, users) => {
-        if(err){
-            return res.status(500).json({error: err});
-        }
-        if(users.length === 0){
-            return res.status(404).json({error: 'user not found'});
-        }
-        if(users[0].password === req.body.pw){
-            res.json({success: true});
-        }else{
-            res.json({success: false});
-        }
-    });
-    //*/
-//});
 router.post('/register', function(req, res, next) {
     var user = new DB.User();
     user.email = req.body.email;
