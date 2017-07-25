@@ -30,13 +30,12 @@ router.get('/logout', function(req, res, next) {
     return res.redirect('/');
 });
 
-router.post('/login', passport.authenticate('login', {failureRedirect: '/api/test'})
-    ,(req, res)=>{
-        console.log('auth Test!!!!');
-        res.redirect('/api/cookie');
-    }
-);
-
+router.post('/login', passport.authenticate('login', {
+    failureRedirect: '/api/test'}), (req, res)=>{
+        //console.log('auth Test!!!!');
+        //res.redirect('/api/cookie');
+        res.render('contents');
+    });
 router.post('/register', function(req, res, next) {
     var user = new DB.User();
     user.email = req.body.email;
