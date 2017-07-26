@@ -1,6 +1,9 @@
 var  validate = {};
 
-validate.validateRegForm = function(user){
+validate.validateRegForm = function(user, pwConfirm){
+    if( user.password != pwConfirm ){
+        return false;
+    }
     if( ! validatePW(user.password) ){
         return false;
     }
