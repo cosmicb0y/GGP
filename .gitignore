@@ -59,3 +59,6 @@ typings/
 
 # MAC filesystem
 .DS_Store
+
+# Webstorm
+.idea/
