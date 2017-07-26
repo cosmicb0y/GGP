@@ -14,7 +14,7 @@ passport.use('login', new localStrategy({
     passReqToCallback : true
     },
     function(req, id, pw, done) {
-        DB.User.findOne({email: req.body.id}, {_id: 0, password: 1}, (err, user) => {
+        DB.User.findOne({email: req.body.id}, {_id: 0, email: 1, nickname: 1, password: 1}, (err, user) => {
             if(err){
                 return done(null, false, { message: 'DB Error!'});
             }

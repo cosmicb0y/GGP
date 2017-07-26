@@ -18,9 +18,9 @@ router.get('/cookie', function(req, res, next) {
 });
 
 router.post('/login'
-    , passport.authenticate('login', {failureRedirect: '/api/test'})
-    , (req, res)=>{
-        res.render('contents');
+    , passport.authenticate('login', {successRedirect: '/', failureRedirect: '/login'})
+    , (req, res)=>{//Don't go now.
+        res.redirect('/');
     });
 
 router.get('/logout', function(req, res, next) {
@@ -30,10 +30,11 @@ router.get('/logout', function(req, res, next) {
                 console.err(err);
                 return res.json({success: false});
             }
-            res.redirect('/');
+            return res.redirect('/');
         });
+    }else{
+        return res.redirect('/');
     }
-    return res.redirect('/');
 });
 
 router.get('/existemail/:email', function(req, res, next){
