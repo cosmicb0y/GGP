@@ -1,0 +1,9 @@
+#topMenu {
+    color: black;
+    background-color: #9d9d9d;
+    padding: 10px;
+}
+
+input[type=text] {
+    width: 100%;
+}
