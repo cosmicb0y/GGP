@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
 var DB = require('./db');
 var passport = require('./passport');
-var validate = require('./validate');
+var Validate = require('./validate');
 
 /* Routing~~~ */
 router.get('/test', function(req, res, next) {
-    //var session = req.session;
-    //session.username = req.query.name;
-    //return res.json(session);
-    res.send('respond with a resource GET. this is /api/test');
+    if(req.session.passport){
+        res.send('You logged in!!');
+    }else{
+        res.send('respond with a resource GET. this is /api/test');
+    }
 });
 
 router.get('/cookie', function(req, res, next) {
@@ -28,7 +28,7 @@ router.get('/logout', function(req, res, next) {
         req.session.destroy(function(err){
             if(err){
                 console.err(err);
-                return res.json({success: false});
+                return res.json({success: false, err: err});
             }
             return res.redirect('/');
         });
@@ -38,34 +38,36 @@ router.get('/logout', function(req, res, next) {
 });
 
 router.get('/existemail/:email', function(req, res, next){
-    DB.User.findOne({email: req.params.email}
-        , {}
-        , (err, exist)=>{
-            if(err){
-                res.json({success: false, err: err});
-            }else if(exist){
-                res.json({success: true, exist: true});
-            }else{
-                res.json({success: true, exist: false});
-            }
-        });
+    DB.User.findOne({email: req.params.email}, {}, (err, exist)=>{
+        if(err){
+            console.err(err);
+            res.json({success: false, error: err});
+        }else if(exist){
+            res.json({success: true, valid: false});
+        }else if(Validate.validateEmail(req.params.email)){
+            res.json({success: true, valid: true});
+        }else{
+            res.json({success: true, valid: false});
+        }
+    });
 });
 
 router.get('/existnickname/:nickname', function(req, res, next){
-    DB.User.findOne({nickname: req.params.nickname}
-        , {}
-        , (err, exist)=>{
-            if(err){
-                res.json({success: false, err: err});
-            }else if(exist){
-                res.json({success: true, exist: true});
-            }else{
-                res.json({success: true, exist: false});
-            }
-        });
+    DB.User.findOne({nickname: req.params.nickname}, {}, (err, exist)=>{
+        if(err){
+            console.err(err);
+            res.json({success: false, error: err});
+        }else if(exist){
+            res.json({success: true, valid: false});
+        }else if(Validate.validateNickname(req.params.nickname)){
+            res.json({success: true, valid: true});
+        }else{
+            res.json({success: true, valid: false});
+        }
+    });
 });
 
-router.post('/register', function(req, res, next) {
+router.post('/register', Validate.validateRegForm, function(req, res, next) {
     var user = new DB.User();
     user.email = req.body.email;
     user.password = req.body.pw;//need to be hashed
@@ -74,31 +76,15 @@ router.post('/register', function(req, res, next) {
     user.university = req.body.univ;
     user.major = req.body.major;
     user.valid = false;//for email validate??
-    var pwConfirm = req.body.pwConfirm;
 
-    //Fail Reason needed?? Talk with HW.
-    DB.User.findOne({ $or: [ {email: user.email}, {nickname: user.nickname} ] }
-        ,{_id: 0, email: 1, nickname: 1, password: 1}
-        ,(err, exist)=>{
-            if(err){
-                res.json({success: false, reason: "DB Error: " + err});
-            }else if( exist ){
-                res.json({success: false, reason: "ID or Nickname Already Exists"});
-            }else if( ! validate.validateRegForm(user, pwConfirm) ){
-                res.json({success: false, reason: "Reg form isn't valid"});
-            }else{
-                user.save((err)=>{
-                    if(err){
-                        console.error(err);
-                        res.json({success: false, reason: "Unknown Error: " + err});
-                        return;
-                    }
-                    return res.redirect('/');
-                });
-            }
-
+    user.save((err)=>{
+        if(err){
+            console.error(err);
+            res.json({success: false, reason: "Unknown Error: " + err});
+            return;
         }
-    );
+        return res.redirect('/login');//make register_success page
+    });
 });
 
 module.exports = router;

@@ -1,22 +1,29 @@
-var  validate = {};
+var DB = require('./db');
 
-validate.validateRegForm = function(user, pwConfirm){
-    if( user.password != pwConfirm ){
-        return false;
+var Validate = {};
+
+Validate.validateRegForm = function(req, res, next){
+    console.log(req.body)
+    if( req.body.pw != req.body.pwConfirm
+        || ! validatePW(req.body.pw)
+        || ! validateCategory(req.body.category)
+        || ! validateUniv(req.body.univ)
+        || ! validateMajor(req.body.major) ){
+        res.state(500).render('error');
     }
-    if( ! validatePW(user.password) ){
-        return false;
-    }
-    if( ! validateCategory(user.category)){
-        return false;
-    }
-    if( ! validateUniv(user.university)){
-        return false;
-    }
-    if( ! validateMajor(user.major)){
-        return false;
-    }
-    return true;
+    DB.User.findOne({ $or: [ {email: req.body.email}, {nickname: req.body.nickname} ] }
+        ,{_id: 0, email: 1, nickname: 1, password: 1}
+        ,(err, exist)=>{
+            if(err){
+                console.err(err);
+                res.state(500).render('error');
+            }else if( exist ){
+                res.state(500).render('error');
+            }else{
+                next();
+            }
+        }
+    );
 }
 
 function validatePW(pw){
@@ -35,4 +42,14 @@ function validateMajor(major){
     return true;
 }
 
-module.exports = validate;
+function validateEmail(email){
+    return true;
+}
+Validate.validateEmail = validateEmail;
+
+function validateNickname(nickname){
+    return true;
+}
+Validate.validateNickname = validateNickname;
+
+module.exports = Validate;

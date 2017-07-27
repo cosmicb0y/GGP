@@ -28,4 +28,20 @@ userSchema.methods.pwCheck = function(pw){
 }
 DB.User = mongoose.model('user', userSchema);
 
+//PROJECT
+var projectSchema = new Schema({
+    name: String,
+    category: Number,
+    writer: Schema.Types.ObjectId,
+    date: { type: Date, default: Date.now },
+    likeCount: Number,
+    likedUser: [Schema.Types.ObjectId],
+    commentCount: Number,
+    projNumber: Number,
+    content: String,
+    summary: String,
+    valid: { type: Boolean, default: true },
+}, {strict: false, autoindex: true});
+DB.Project = mongoose.model('project', projectSchema);
+
 module.exports = DB;
