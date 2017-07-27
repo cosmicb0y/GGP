@@ -7,3 +7,17 @@
 input[type=text] {
     width: 100%;
 }
+
+.wrap {
+    width: 80%;
+    margin: 10px auto;
+}
+
+@media (min-width:34em) {
+    .card-deck > .card
+    {
+        width: 10%;
+        flex-wrap: wrap;
+        flex: initial;
+    }
+}
