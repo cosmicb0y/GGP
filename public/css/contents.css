@@ -7,3 +7,64 @@
 input[type=text] {
     width: 100%;
 }
+
+
+.center-cropped{
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+
+img{
+    position: relative;
+    left: 50%;
+    transform: translate(-50%,0);
+}
+
+.card-deck{
+    position: relative;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.card {
+    width: 16%;
+    max-width: 16%;
+
+    margin: 15px;
+
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+
+@media all and (max-width: 1024px) {
+    .wrap {
+        width: 100%;
+        margin: 10px auto;
+    }
+}
+
+@media all and (min-width: 1024px) {
+    .wrap {
+        width: 80%;
+        margin: 10px auto;
+    }
+}
+
+.inProgress {
+    position: fixed;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+
+    border: 1px solid #000000;
+    background-color: white;
+}
+
