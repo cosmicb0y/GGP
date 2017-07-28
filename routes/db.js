@@ -40,6 +40,7 @@ var projectSchema = new Schema({
     projNumber: Number,
     content: String,
     summary: String,
+    viewed: Number,
     valid: { type: Boolean, default: true },
 }, {strict: false, autoindex: true});
 DB.Project = mongoose.model('project', projectSchema);
