@@ -62,3 +62,6 @@ typings/
 
 # Webstorm
 .idea/
+
+# Upload directory. Will Change soon!!
+uploads/

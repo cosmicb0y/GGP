@@ -5,11 +5,11 @@
     </head>
     <body>
     <div class="uploadForm">
-        <form name="upload" method="post" id="login" action="">
-            <input name="title" value="" placeholder="제목" type="text">
-            <input name="abstract" value="" placeholder="요약" type="text">
+        <form name="upload" method="post" id="login" action="/api/upload" enctype="multipart/form-data">
+            <input name="title" value="" placeholder="PrjName" type="text"><br>
+            <input name="abstract" value="" placeholder="Abstract" type="text"><br>
             사진
-            <input name="photo" type="file">
+            <input name="photo" type="file" multiple><br>
 
 
             <input value="올리기" type="submit">

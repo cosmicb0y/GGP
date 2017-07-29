@@ -87,4 +87,20 @@ router.post('/register', Validate.validateRegForm, function(req, res, next) {
     });
 });
 
+var multer  = require('multer')
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/test')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+});
+var upload = multer({ dest: 'uploads/', storage: storage })
+router.post('/upload', upload.array('photo', 3), function(req, res, next){
+
+    console.log(req.files);
+    res.json(req.files);
+});
+
 module.exports = router;

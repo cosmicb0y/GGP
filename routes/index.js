@@ -15,6 +15,10 @@ router.get('/login', function(req, res, next) {
     return res.render('login');
 });
 
+router.get('/upload', function(req, res, next) {
+    return res.render('upload');
+});
+
 router.get('/test', function(req, res, next) {
     return res.render('test');
 });
