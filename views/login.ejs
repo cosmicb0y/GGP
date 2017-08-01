@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
-    <title>Login!</title>
-  </head>
-  <body>
-    <h1>Login!!</h1>
+    <title>세상의 모든 프로젝트</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <scrip src="/js/login.js"></scrip>
+</head>
+<body>
+    <div class="container">
+        <h1>로그인</h1>
 
-    <div class="loginForm">
-        <form name="login" method="post" id="login" action="/api/login">
-            <input name="id" value="" placeholder="ID" type="text">
-            <input name="pw" value="" placeholder="Password" type="password">
-            <input value="LOGIN!!" type="submit">
-        </form>
+        <div class="loginForm">
+            <form name="login" method="post" id="login" action="/api/login">
+                <input name="id" value="" placeholder="ID" type="text">
+                <input name="pw" value="" placeholder="Password" type="password">
+                <input id="login" value="로그인" type="submit">
+            </form>
+        </div>
     </div>
-
-  </body>
+</body>
 </html>
