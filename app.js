@@ -24,12 +24,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //Session, Passport initialize.
 app.use(session({ secret: 'SessionTest!!'
     , resave: true
     , saveUninitialized: false 
-    , cookie: {secure: false, maxAge: 1000*60} }));
+    , cookie: {secure: false, maxAge: 1000*60*30} }));
 app.use(passport.initialize());
 app.use(passport.session());
 

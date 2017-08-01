@@ -3,6 +3,7 @@ var router = express.Router();
 var DB = require('./db');
 var passport = require('./passport');
 var Validate = require('./validate');
+var path = require('path');
 
 /* Routing~~~ */
 router.get('/test', function(req, res, next) {
@@ -93,14 +94,48 @@ var storage = multer.diskStorage({
         cb(null, 'uploads/test')
     },
     filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now())
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     }
 });
 var upload = multer({ dest: 'uploads/', storage: storage })
-router.post('/upload', upload.array('photo', 3), function(req, res, next){
+router.post('/upload'
+    , upload.array('photo', 3)
+    , function(req, res, next){
+        console.log(req);
+        if(! req.user){
+            res.redirect('/login');
+            return;
+        }
+        var project = new DB.Project();
+        project.name = req.body.title;
+        project.summary = req.body.summary;
+        project.category = req.body.category;
+        project.content = req.body.content;
+        project.photos = req.files.map((file)=>file.path);
+        project.writer = req.user.email;//change to objectid later.
+        project.likeCount = 0;
+        project.likedUser = [];
+        project.commentCount = 0;
+        project.projectNumber = 0;
+        project.viewd = 123;
 
-    console.log(req.files);
-    res.json(req.files);
-});
+        //console.log(req.files);
+        //res.json(req.files);
+        project.save((err)=>{
+            if(err){
+                console.error(err);
+                res.json({success: false, reason: "Unknown Error: " + err});
+                return;
+            }
+            res.redirect('/');
+        });
+    });
+
+router.get('/content'
+    , function(req, res, next){
+        DB.Project.find({nickname: req.params.nickname}, {}, (err, projects)=>{
+            res.json(projects);
+        });
+    });
 
 module.exports = router;

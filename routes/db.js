@@ -31,8 +31,8 @@ DB.User = mongoose.model('user', userSchema);
 //PROJECT
 var projectSchema = new Schema({
     name: String,
-    category: Number,
-    writer: Schema.Types.ObjectId,
+    category: String,//to Number,
+    writer: String,//to Schema.Types.ObjectId,
     date: { type: Date, default: Date.now },
     likeCount: Number,
     likedUser: [Schema.Types.ObjectId],
@@ -41,6 +41,7 @@ var projectSchema = new Schema({
     content: String,
     summary: String,
     viewed: Number,
+    photos: [String],
     valid: { type: Boolean, default: true },
 }, {strict: false, autoindex: true});
 DB.Project = mongoose.model('project', projectSchema);
