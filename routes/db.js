@@ -1,6 +1,7 @@
-var DB = {};
-
 var mongoose = require('mongoose');
+var Hash = require('./hash');
+
+var DB = {};
 
 //DB Connecting/Setting.
 var db = mongoose.connection;
@@ -20,11 +21,13 @@ var userSchema = new Schema({
     category: String,
     university: String,
     major: String,
+    salt: String,
     valid: { type: Boolean, default: false },
     reg_date: { type: Date, default: Date.now }
 }, {strict: false, autoindex: true});
-userSchema.methods.pwCheck = function(pw){
-    return this.password == pw;
+userSchema.methods.pwCheck = function(input, cb){
+    console.log(this.salt);
+    Hash.compareHashed(this.password, input, this.salt, cb);
 }
 DB.User = mongoose.model('user', userSchema);
 

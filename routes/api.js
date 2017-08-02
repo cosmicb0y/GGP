@@ -6,14 +6,6 @@ var Validate = require('./validate');
 var path = require('path');
 
 /* Routing~~~ */
-router.get('/test', function(req, res, next) {
-    if(req.session.passport){
-        res.send('You logged in!!');
-    }else{
-        res.send('respond with a resource GET. this is /api/test');
-    }
-});
-
 router.get('/cookie', function(req, res, next) {
     return res.json(req.session);
 });
@@ -25,7 +17,7 @@ router.post('/login'
     });
 
 router.get('/logout', function(req, res, next) {
-    if(req.session.passport){
+    if(req.user){//session.passport){
         req.session.destroy(function(err){
             if(err){
                 console.err(err);
@@ -68,25 +60,30 @@ router.get('/existnickname/:nickname', function(req, res, next){
     });
 });
 
-router.post('/register', Validate.validateRegForm, function(req, res, next) {
-    var user = new DB.User();
-    user.email = req.body.email;
-    user.password = req.body.pw;//need to be hashed
-    user.nickname = req.body.nickname;
-    user.category = req.body.category;
-    user.university = req.body.univ;
-    user.major = req.body.major;
-    user.valid = false;//for email validate??
+var Hash = require('./hash');
+router.post('/register'
+    , Validate.validateRegForm
+    , Hash.pwHash
+    , function(req, res, next) {
+        var user = new DB.User();
+        user.email = req.body.email;
+        user.password = req.body.pw;//need to be hashed
+        user.nickname = req.body.nickname;
+        user.category = req.body.category;
+        user.university = req.body.univ;
+        user.major = req.body.major;
+        user.salt = req.body.salt;
+        user.valid = false;//for email validate??
 
-    user.save((err)=>{
-        if(err){
-            console.error(err);
-            res.json({success: false, reason: "Unknown Error: " + err});
-            return;
-        }
-        return res.redirect('/login');//make register_success page
+        user.save((err)=>{
+            if(err){
+                console.error(err);
+                res.json({success: false, reason: "Unknown Error: " + err});
+                return;
+            }
+            return res.redirect('/login');//make register_success page
+        });
     });
-});
 
 var multer  = require('multer')
 var storage = multer.diskStorage({
@@ -119,8 +116,6 @@ router.post('/upload'
         project.projectNumber = 0;
         project.viewd = 123;
 
-        //console.log(req.files);
-        //res.json(req.files);
         project.save((err)=>{
             if(err){
                 console.error(err);
@@ -133,9 +128,12 @@ router.post('/upload'
 
 router.get('/content'
     , function(req, res, next){
-        DB.Project.find({nickname: req.params.nickname}, {}, (err, projects)=>{
+        DB.Project.find({}, {}, (err, projects)=>{
             res.json(projects);
         });
     });
+
+var codeTable = require('./codeTable');
+router.use(codeTable);
 
 module.exports = router;

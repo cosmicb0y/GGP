@@ -14,19 +14,21 @@ passport.use('login', new localStrategy({
     passReqToCallback : true
     },
     function(req, id, pw, done) {
-        DB.User.findOne({email: req.body.id}, {_id: 0, email: 1, nickname: 1, password: 1}, (err, user) => {
+        DB.User.findOne({email: req.body.id}, {_id: 0, email: 1, nickname: 1, password: 1, salt: 1}, (err, user) => {
             if(err){
                 return done(null, false, { message: 'DB Error!'});
             }
             if(user == null){
                 return done(null, false, { message: 'No user with id!'});
             }
-            if(user.pwCheck(pw)){
-                return done(null, user);
-            }else{
-                return done(null, false, { message: 'PW not match!'});
-            }
-        })
+            user.pwCheck(pw, (success)=>{
+                if(success){
+                    return done(null, user);
+                }else{
+                    return done(null, false, { message: 'PW not match!'});
+                }
+            });
+        });
     }
 ));
 
