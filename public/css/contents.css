@@ -11,9 +11,13 @@ input[type=text] {
 
 .center-cropped{
     width: 100%;
-    text-align: center;
+    height: 300px;
+    object-fit: none; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
     overflow: hidden;
+    position: relative;
 }
+
 
 img{
     position: relative;
@@ -66,5 +70,25 @@ img{
 
     border: 1px solid #000000;
     background-color: white;
+}
+
+.card-block {
+    height: 300px;
+}
+
+#upperRow {
+    height: 15%;
+}
+
+#name {
+    height: 20%;
+}
+
+#summary {
+    height: 50%;
+}
+
+#lowerRow {
+    height: 10%;
 }
 
