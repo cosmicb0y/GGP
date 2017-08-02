@@ -23,6 +23,7 @@ var userSchema = new Schema({
     major: String,
     salt: String,
     valid: { type: Boolean, default: false },
+    viewed: Number,
     reg_date: { type: Date, default: Date.now }
 }, {strict: false, autoindex: true});
 userSchema.methods.pwCheck = function(input, cb){
