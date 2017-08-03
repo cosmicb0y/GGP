@@ -1,6 +1,6 @@
 var crypto = require('crypto');
 var hashsum = crypto.createHash('sha256');
-var randstr = require('randomstring');
+var randonstring = require('randomstring');
 const Round = 2029;
 
 var Hash = {};
@@ -10,7 +10,7 @@ function myHash(plain, salt, cb){
 }
 
 Hash.pwHash = function(req, res, next){
-    req.body.salt = randstr.generate();
+    req.body.salt = randonstring.generate();
     myHash(req.body.pw, req.body.salt, (err, derivedKey) => {
         if (err){
             console.log(err);

@@ -26,25 +26,25 @@ var userSchema = new Schema({
     reg_date: { type: Date, default: Date.now }
 }, {strict: false, autoindex: true});
 userSchema.methods.pwCheck = function(input, cb){
-    console.log(this.salt);
     Hash.compareHashed(this.password, input, this.salt, cb);
 }
 DB.User = mongoose.model('user', userSchema);
 
 //PROJECT
 var projectSchema = new Schema({
+    id: String,
     name: String,
     category: String,//to Number,
+    summary: String,
+    content: String,
+    photos: [String],
     writer: String,//to Schema.Types.ObjectId,
-    date: { type: Date, default: Date.now },
+
+    commentCount: Number,
     likeCount: Number,
     likedUser: [Schema.Types.ObjectId],
-    commentCount: Number,
-    projNumber: Number,
-    content: String,
-    summary: String,
     viewed: Number,
-    photos: [String],
+    date: { type: Date, default: Date.now },
     valid: { type: Boolean, default: true },
 }, {strict: false, autoindex: true});
 DB.Project = mongoose.model('project', projectSchema);

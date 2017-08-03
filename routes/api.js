@@ -5,6 +5,16 @@ var passport = require('./passport');
 var Validate = require('./validate');
 var path = require('path');
 
+function loggedinOrRedirectTo(to){
+    return function(req, res, next){
+        if(req.user){
+            next();
+        }else{
+            res.redirect(to);
+        }
+    }
+}
+
 /* Routing~~~ */
 router.get('/cookie', function(req, res, next) {
     return res.json(req.session);
@@ -86,35 +96,53 @@ router.post('/register'
     });
 
 var multer  = require('multer')
+var randomstring = require('randomstring');
+var fs = require('fs');
+var mkdirp = require('mkdirp');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/test')
+        //save file to GGP/uploads/projectID
+        cb(null, path.join('uploads', req.projectID));
     },
     filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+        cb(null, Date.now() + randomstring.generate() + path.extname(file.originalname));
     }
 });
-var upload = multer({ dest: 'uploads/', storage: storage })
+function setProjectIDAndMakeDirectory(req, res, next){
+    //ISO Date String. remove ':' and '.'
+    var date = new Date().toISOString().replace(/:/g, '').replace(/\./g, '');
+    var id = date + "_" + randomstring.generate();
+    req.projectID = id;
+    mkdirp('uploads/' + id, (err)=>{
+        if(err){
+            console.log(err);
+            res.status(500).render('error');
+        }else{
+            next();
+        }
+    });
+}
+var upload = multer({ storage: storage })
 router.post('/upload'
+    , loggedinOrRedirectTo('/login')
+    , setProjectIDAndMakeDirectory
     , upload.array('photo', 3)
     , function(req, res, next){
-        console.log(req);
-        if(! req.user){
-            res.redirect('/login');
-            return;
-        }
         var project = new DB.Project();
+        project.id = req.projectID
         project.name = req.body.title;
-        project.summary = req.body.summary;
         project.category = req.body.category;
+        project.summary = req.body.summary;
         project.content = req.body.content;
         project.photos = req.files.map((file)=>file.path);
         project.writer = req.user.email;//change to objectid later.
+
+        project.commentCount = 0;
         project.likeCount = 0;
         project.likedUser = [];
-        project.commentCount = 0;
-        project.projectNumber = 0;
-        project.viewd = 123;
+        project.viewed = 123;
+        //project.date = Date.now;//default
+        //project.valid = true;//default
 
         project.save((err)=>{
             if(err){
@@ -128,9 +156,22 @@ router.post('/upload'
 
 router.get('/content'
     , function(req, res, next){
-        DB.Project.find({}, {}, (err, projects)=>{
-            res.json(projects);
-        });
+        DB.Project.find({valid: true}
+            , { id: 1,
+                name: 1,
+                category: 1,
+                summary: 1,
+                content: 1,
+                photos: 1,
+                writer: 1,
+                commentCount: 1,
+                likeCount: 1,
+                likedUser: 1,
+                viewed: 1,
+                date: 1,}
+            , (err, projects)=>{
+                res.json(projects);
+            }).limit(15);
     });
 
 var codeTable = require('./codeTable');
