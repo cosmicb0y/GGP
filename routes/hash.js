@@ -16,7 +16,7 @@ Hash.pwHash = function(req, res, next){
             console.log(err);
             res.state(500).render('error');
         }else{
-            req.body.pw = derivedKey.toString();
+            req.body.pw = derivedKey.toString('hex');
             next();
         }
     });
@@ -27,7 +27,7 @@ Hash.compareHashed = (hashed, plain, salt, cb)=>{
         if (err){
             console.log(err);
             cb(false);
-        }else if(hashed == derivedKey){
+        }else if(hashed == derivedKey.toString('hex'){
             cb(true);
         }else{
             cb(false);
