@@ -27,7 +27,7 @@ Hash.compareHashed = (hashed, plain, salt, cb)=>{
         if (err){
             console.log(err);
             cb(false);
-        }else if(hashed == derivedKey.toString('hex'){
+        }else if(hashed == derivedKey.toString('hex')){
             cb(true);
         }else{
             cb(false);
