@@ -157,7 +157,7 @@ router.post('/upload'
 router.get('/content'//require category, page
     , function(req, res, next){
         DB.Project.find({valid: true}
-            , { //id: 1,//for calling this project
+            , { _id: 0,//for calling this project
                 name: 1,
                 //thumebnail: 1, // Add later
                 category: 1,
