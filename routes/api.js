@@ -140,7 +140,7 @@ router.post('/upload'
         project.commentCount = 0;
         project.likeCount = 0;
         project.likedUser = [];
-        project.viewed = 123;
+        project.viewed = 0;
         //project.date = Date.now;//default
         //project.valid = true;//default
 
@@ -150,30 +150,81 @@ router.post('/upload'
                 res.json({success: false, reason: "Unknown Error: " + err});
                 return;
             }
-            res.redirect('/');
+            res.redirect('/');//Change to success json.(process at front)
         });
     });
 
-router.get('/content'
+router.get('/content'//require category, page
     , function(req, res, next){
         DB.Project.find({valid: true}
-            , { id: 1,
+            , { //id: 1,//for calling this project
                 name: 1,
+                //thumebnail: 1, // Add later
                 category: 1,
                 summary: 1,
-                content: 1,
-                photos: 1,
+                //content: 1,//Don't need now.
+                photos: 1,//make thumbnail later.
                 writer: 1,
                 commentCount: 1,
                 likeCount: 1,
-                likedUser: 1,
+                //likedUser: 1,//Don't need now.
                 viewed: 1,
                 date: 1,}
             , (err, projects)=>{
+                projects.success = true;
                 res.json(projects);
             }).limit(15);
     });
 
+router.post('/comment'
+    , loggedinOrRedirectTo('/login')
+    , (req, res, next) => {
+        var comment = new DB.Comment();
+        comment.writer = req.user.nickname;
+        comment.project = req.body.project;
+        comment.content = req.body.content;
+        //comment.date = Date.now;
+        
+        comment.save((err)=>{
+            if(err){
+                console.log(err);
+                res.json({success: false, reason: "DB Error: " + err});
+                return;
+            }else{
+                DB.Project.update( {id: comment.project}
+                    , { $inc: { "commentCount": 1 } }
+                    , (err, proj)=>{
+                        if(err){
+                            console.log(err);
+                            res.json({success: false, reason: "DB Error: " + err});
+                            return;
+                        }else if( ! proj ){
+                            res.json({success: false, reason: "No project: " + comment.project});
+                        }else{
+                            //proj.commentCount.$inc();
+                            console.log(proj);
+                            res.json({success: true});
+                        }
+                    });
+            }
+        });
+    });
+router.get('/comment/:project'
+    //, loggedinOrRedirectTo('/login')
+    , (req, res, next) =>{
+        DB.Comment.find({project: req.params.project}
+            , {_id: 0, content: 1, project: 1, date: 1}
+            , (err, comments)=>{
+                if(err){
+                    res.json({success: false, reason: "DB Error: " + err});
+                    return;
+                }else{
+                    comments.success = true;
+                    res.json(comments);
+                    return;
+                }
+            });
+    });
 var codeTable = require('./codeTable');
 router.use(codeTable);
 

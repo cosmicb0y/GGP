@@ -23,4 +23,8 @@ router.get('/test', function(req, res, next) {
     return res.render('test');
 });
 
+router.get('/tmpcomment', function(req, res, next) {
+    return res.render('tmpcomment');
+});
+
 module.exports = router;

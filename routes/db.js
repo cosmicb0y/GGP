@@ -35,6 +35,7 @@ DB.User = mongoose.model('user', userSchema);
 var projectSchema = new Schema({
     id: String,
     name: String,
+    //thumbnail: String, // Add later.
     category: String,//to Number,
     summary: String,
     content: String,
@@ -49,5 +50,16 @@ var projectSchema = new Schema({
     valid: { type: Boolean, default: true },
 }, {strict: false, autoindex: true});
 DB.Project = mongoose.model('project', projectSchema);
+
+//COMMENT
+var commentSchema = new Schema({
+    writer: String,
+    project: String,
+    content: String,
+    date: { type: Date, default: Date.now },
+}, {strict: false, autoindex: true});
+DB.Comment = mongoose.model('comment', commentSchema);
+
+DB.Schema = mongoose.Schema;
 
 module.exports = DB;
