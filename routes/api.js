@@ -157,7 +157,7 @@ router.post('/upload'
         });
     });
 
-router.get('/content'//require category, page
+router.get('/contents'//require category, page
     , function(req, res, next){
         DB.Project.find({valid: true}
             , { _id: 0,//for calling this project
