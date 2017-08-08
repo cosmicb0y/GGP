@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var passport = require('./routes/passport');
+var passport = require('./routes/logic/passport');
 
 var index = require('./routes/index');
 var users = require('./routes/users');

@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var DB = require('./db');
-var passport = require('./passport');
-var Validate = require('./validate');
+var DB = require('./logic/db');
+var Passport = require('./logic/passport');
+var Validate = require('./logic/validate');
+var Hash = require('./logic/hash');
+var CodeTable = require('./logic/codeTable');
 var path = require('path');
 
 function loggedinOrRedirectTo(to){
@@ -16,12 +18,14 @@ function loggedinOrRedirectTo(to){
 }
 
 /* Routing~~~ */
+router.use(CodeTable);
+
 router.get('/cookie', function(req, res, next) {
     return res.json(req.session);
 });
 
 router.post('/login'
-    , passport.authenticate('login', {successRedirect: '/', failureRedirect: '/login'})
+    , Passport.authenticate('login', {successRedirect: '/', failureRedirect: '/login'})
     , (req, res)=>{//Don't go now.
         res.redirect('/');
     });
@@ -70,7 +74,6 @@ router.get('/existnickname/:nickname', function(req, res, next){
     });
 });
 
-var Hash = require('./hash');
 router.post('/register'
     , Validate.validateRegForm
     , Hash.pwHash
@@ -225,7 +228,5 @@ router.get('/comment/:project'
                 }
             });
     });
-var codeTable = require('./codeTable');
-router.use(codeTable);
 
 module.exports = router;

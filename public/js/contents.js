@@ -27,7 +27,7 @@ $(document).ready(function () {
             var name = data.name;
             var summary = data.summary;
             var likeCount = data.likeCount;
-            var view = 0; //temporary puts 0, it should modify later.
+            var view = data.viewed; //temporary puts 0, it should modify later.
             var comments = data.commentCount;
 
             $('.card-deck').append('                <div class="card">\n' +
