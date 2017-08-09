@@ -34,9 +34,8 @@ $(document).ready(function () {
             var view = data.viewed; //temporary puts 0, it should modify later.
             var comments = data.commentCount;
 
-            $('.card-deck').click(()=>{
-                window.location.href = '/api/project/' + data.id
-            }).append('                <div class="card">\n' +
+            $('.card-deck').append(
+                '                <div class="card">\n' +
                 "                    <div class=\"center-cropped\">\n" +
                 '                        <img class="card-img-top" src="http://chacham.xyz:3000/'+thumbnail+' " alt="Card image cap">\n' +
                 "                    </div>\n" +
@@ -54,8 +53,8 @@ $(document).ready(function () {
                 "                        </div>\n" +
                 "                    </div>\n" +
                 "\n" +
-                "                </div>");
-
+                "                </div>")
+            .children().last().on( 'click', ()=>{window.location.href = '/api/project/' + data.id} );;
 
         });
     });
