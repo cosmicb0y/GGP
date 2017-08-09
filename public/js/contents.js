@@ -17,10 +17,14 @@ window.addEventListener("scroll", function(){ // or window.addEventListener("scr
 
 $(document).ready(function () {
     var url = "http://chacham.xyz:3000/api/contents/0";
+    //Change page later!!! Wooooooork!!!
 
     $.getJSON(url, function(data) {
         var items = [];
-        $.each( data, function( i, data ) {
+        if( ! data.success){
+            //Get Error??
+        }
+        $.each( data.projects, function( i, data ) {
             var thumbnail = data.thumbnail;
             var category = data.category;
             var writer = data.writer;
@@ -30,7 +34,9 @@ $(document).ready(function () {
             var view = data.viewed; //temporary puts 0, it should modify later.
             var comments = data.commentCount;
 
-            $('.card-deck').append('                <div class="card">\n' +
+            $('.card-deck').click(()=>{
+                window.location.href = '/api/project/' + data.id
+            }).append('                <div class="card">\n' +
                 "                    <div class=\"center-cropped\">\n" +
                 '                        <img class="card-img-top" src="http://chacham.xyz:3000/'+thumbnail+' " alt="Card image cap">\n' +
                 "                    </div>\n" +

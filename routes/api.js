@@ -165,33 +165,39 @@ router.get('/contents/:page'//require category, page
     , function(req, res, next){
         DB.Project.find({valid: true}
             , { _id: 0,//for calling this project
+                id: 1,
                 name: 1,
-                thumbnail: 1, // Add later
                 category: 1,
                 summary: 1,
                 //content: 1,//Don't need now.
+                thumbnail: 1, // Add later
                 //photos: 1,//make thumbnail later.
                 writer: 1,
                 commentCount: 1,
                 likeCount: 1,
                 //likedUser: 1,//Don't need now.
                 viewed: 1,
-                date: 1,}
-            , (err, projects)=>{
-                projects.success = true;
-                res.json(projects);
-            })
+                date: 1})
             .skip(req.params.page * 15)
-            .limit(15);
+            .limit(15)
+            .exec((err, projects)=>{
+                if(err){
+                    console.error(err);
+                    res.json({success: false, reason: "DB Error: " + err});
+                    return;
+                }
+                res.json({success: true, projects: projects});
+            });
     });
 
-router.get('/project/:id'//require category, page
+router.get('/project/:id'//require category
     , function(req, res, next){
-        //req.params.id
-        DB.Project.find({id: req.params.id, valid: true}
-            , { _id: 0,//for calling this project
+        DB.Project.findOneAndUpdate(
+            {id: req.params.id, valid: true}
+            , { $inc: { viewed: 1} }
+            , { _id: 0,
                 name: 1,
-                //thumebnail: 1, // Add later
+                thumebnail: 1, // Add later
                 category: 1,
                 summary: 1,
                 content: 1,//Don't need now.
@@ -202,10 +208,10 @@ router.get('/project/:id'//require category, page
                 likedUser: 1,//Don't need now.
                 viewed: 1,
                 date: 1,}
-            , (err, projects)=>{
-                projects.success = true;
-                res.json(projects);
-            }).limit(15);
+            , (err, project)=>{
+                project.success = true;
+                res.json(project);
+            });
     });
 
 router.post('/comment'
