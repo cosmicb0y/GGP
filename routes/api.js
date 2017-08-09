@@ -6,7 +6,12 @@ var Validate = require('./logic/validate');
 var Hash = require('./logic/hash');
 var CodeTable = require('./logic/codeTable');
 var path = require('path');
+var multer  = require('multer')
+var randomstring = require('randomstring');
+var fs = require('fs');
+var mkdirp = require('mkdirp');
 
+/* Methods~~~ */
 function loggedinOrRedirectTo(to){
     return function(req, res, next){
         if(req.user){
@@ -15,6 +20,20 @@ function loggedinOrRedirectTo(to){
             res.redirect(to);
         }
     }
+}
+function setProjectIDAndMakeDirectory(req, res, next){
+    //ISO Date String. remove ':' and '.'
+    var date = new Date().toISOString().replace(/:/g, '').replace(/\./g, '');
+    var id = date + "_" + randomstring.generate();
+    req.projectID = id;
+    mkdirp('uploads/' + id, (err)=>{
+        if(err){
+            console.log(err);
+            res.status(500).render('error');
+        }else{
+            next();
+        }
+    });
 }
 
 /* Routing~~~ */
@@ -98,10 +117,6 @@ router.post('/register'
         });
     });
 
-var multer  = require('multer')
-var randomstring = require('randomstring');
-var fs = require('fs');
-var mkdirp = require('mkdirp');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         //save file to GGP/uploads/projectID
@@ -111,25 +126,21 @@ var storage = multer.diskStorage({
         cb(null, Date.now() + randomstring.generate() + path.extname(file.originalname));
     }
 });
-function setProjectIDAndMakeDirectory(req, res, next){
-    //ISO Date String. remove ':' and '.'
-    var date = new Date().toISOString().replace(/:/g, '').replace(/\./g, '');
-    var id = date + "_" + randomstring.generate();
-    req.projectID = id;
-    mkdirp('uploads/' + id, (err)=>{
-        if(err){
-            console.log(err);
-            res.status(500).render('error');
-        }else{
-            next();
-        }
-    });
-}
-var upload = multer({ storage: storage })
+var thumbnailStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join('uploads', req.projectID));
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + randomstring.generate() + path.extname(file.originalname));
+    }
+});
+var photos = multer({ storage: storage })
 router.post('/upload'
     , loggedinOrRedirectTo('/login')
     , setProjectIDAndMakeDirectory
-    , upload.array('photo', 3)
+    , photos.fields(
+        [{name: 'thumbnail'},
+        {name: 'photos', maxCount: 10}])
     , function(req, res, next){
         var project = new DB.Project();
         project.id = req.projectID
@@ -137,7 +148,8 @@ router.post('/upload'
         project.category = req.body.category;
         project.summary = req.body.summary;
         project.content = req.body.content;
-        project.photos = req.files.map((file)=>file.path);
+        project.thumbnail = req.files.thumbnail[0].path;
+        project.photos = req.files.photos.map((file)=>file.path);
         project.writer = req.user.email;//change to objectid later.
 
         project.commentCount = 0;
@@ -157,20 +169,45 @@ router.post('/upload'
         });
     });
 
-router.get('/contents'//require category, page
+router.get('/contents/:page'//require category, page
     , function(req, res, next){
         DB.Project.find({valid: true}
+            , { _id: 0,//for calling this project
+                name: 1,
+                thumebnail: 1, // Add later
+                category: 1,
+                summary: 1,
+                //content: 1,//Don't need now.
+                //photos: 1,//make thumbnail later.
+                writer: 1,
+                commentCount: 1,
+                likeCount: 1,
+                //likedUser: 1,//Don't need now.
+                viewed: 1,
+                date: 1,}
+            , (err, projects)=>{
+                projects.success = true;
+                res.json(projects);
+            })
+            .skip(req.params.page * 15)
+            .limit(15);
+    });
+
+router.get('/project/:id'//require category, page
+    , function(req, res, next){
+        //req.params.id
+        DB.Project.find({id: req.params.id, valid: true}
             , { _id: 0,//for calling this project
                 name: 1,
                 //thumebnail: 1, // Add later
                 category: 1,
                 summary: 1,
-                //content: 1,//Don't need now.
+                content: 1,//Don't need now.
                 photos: 1,//make thumbnail later.
                 writer: 1,
                 commentCount: 1,
                 likeCount: 1,
-                //likedUser: 1,//Don't need now.
+                likedUser: 1,//Don't need now.
                 viewed: 1,
                 date: 1,}
             , (err, projects)=>{

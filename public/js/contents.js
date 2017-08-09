@@ -16,12 +16,12 @@ window.addEventListener("scroll", function(){ // or window.addEventListener("scr
 
 
 $(document).ready(function () {
-    var url = "http://chacham.xyz:3000/api/contents";
+    var url = "http://chacham.xyz:3000/api/contents/1";
 
     $.getJSON(url, function(data) {
         var items = [];
         $.each( data, function( i, data ) {
-            var photo = data.photos[0];
+            var thumbnail = data.thumbnail;
             var category = data.category;
             var writer = data.writer;
             var name = data.name;
@@ -32,7 +32,7 @@ $(document).ready(function () {
 
             $('.card-deck').append('                <div class="card">\n' +
                 "                    <div class=\"center-cropped\">\n" +
-                '                        <img class="card-img-top" src="http://chacham.xyz:3000/'+photo+' " alt="Card image cap">\n' +
+                '                        <img class="card-img-top" src="http://chacham.xyz:3000/'+thumbnail+' " alt="Card image cap">\n' +
                 "                    </div>\n" +
                 "                    <div class=\"card-block\">\n" +
                 "                        <div class=\"row\" id=\"upperRow\">\n" +

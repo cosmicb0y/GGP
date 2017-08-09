@@ -35,12 +35,12 @@ DB.User = mongoose.model('user', userSchema);
 var projectSchema = new Schema({
     id: String,
     name: String,
-    //thumbnail: String, // Add later.
     category: String,//to Number,
     summary: String,
     content: String,
+    thumbnail: String, // Add later.
     photos: [String],
-    writer: String,//to Schema.Types.ObjectId,
+    writer: String,//id now.//to Schema.Types.ObjectId,
 
     commentCount: Number,
     likeCount: Number,
