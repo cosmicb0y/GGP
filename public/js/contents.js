@@ -41,15 +41,15 @@ $(document).ready(function () {
                 "                    </div>\n" +
                 "                    <div class=\"card-block\">\n" +
                 "                        <div class=\"row\" id=\"upperRow\">\n" +
-                '                            <div class="col-sm-6" id="category">'+category+'</div>\n' +
-                '                            <div class="col-sm-6" id="writer">'+writer+'</div>\n' +
+                '                            <div class="col-6" id="category">'+category+'</div>\n' +
+                '                            <div class="col-6" id="writer">'+writer+'</div>\n' +
                 "                        </div>\n" +
                 '                        <h4 class="card-title" id="name">'+name+'</h4>\n' +
                 '                        <p class="card-text" id="summary">'+summary+'</p>\n' +
                 "                        <div class=\"row\" id=\"lowerRow\">\n" +
-                '                            <div class="col-sm-4" id="views">'+view+'</div>\n' +
-                '                            <div class="col-sm-4" id="likes">'+likeCount+'</div>\n' +
-                '                            <div class="col-sm-4" id="comments">'+comments+'</div>\n' +
+                '                            <div class="col-4" id="views">'+view+'</div>\n' +
+                '                            <div class="col-4" id="likes">'+likeCount+'</div>\n' +
+                '                            <div class="col-4" id="comments">'+comments+'</div>\n' +
                 "                        </div>\n" +
                 "                    </div>\n" +
                 "\n" +

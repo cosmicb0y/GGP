@@ -25,6 +25,12 @@ img{
     transform: translate(-50%,0);
 }
 
+@media (min-width: 576px) {
+    .card {
+        max-width: 17%;
+    }
+}
+
 .card-deck{
     position: relative;
     -webkit-justify-content: center;
@@ -34,13 +40,11 @@ img{
 }
 
 .card {
-    width: 16%;
-    max-width: 16%;
-
     margin: 15px;
 
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
+
 
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
