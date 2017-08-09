@@ -126,14 +126,6 @@ var storage = multer.diskStorage({
         cb(null, Date.now() + randomstring.generate() + path.extname(file.originalname));
     }
 });
-var thumbnailStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join('uploads', req.projectID));
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + randomstring.generate() + path.extname(file.originalname));
-    }
-});
 var photos = multer({ storage: storage })
 router.post('/upload'
     , loggedinOrRedirectTo('/login')
@@ -174,7 +166,7 @@ router.get('/contents/:page'//require category, page
         DB.Project.find({valid: true}
             , { _id: 0,//for calling this project
                 name: 1,
-                thumebnail: 1, // Add later
+                thumbnail: 1, // Add later
                 category: 1,
                 summary: 1,
                 //content: 1,//Don't need now.

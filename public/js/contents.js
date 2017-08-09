@@ -16,7 +16,7 @@ window.addEventListener("scroll", function(){ // or window.addEventListener("scr
 
 
 $(document).ready(function () {
-    var url = "http://chacham.xyz:3000/api/contents/1";
+    var url = "http://chacham.xyz:3000/api/contents/0";
 
     $.getJSON(url, function(data) {
         var items = [];
