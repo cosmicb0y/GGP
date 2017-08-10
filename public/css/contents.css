@@ -37,6 +37,8 @@ img{
     justify-content: center;
     -webkit-align-items: center;
     align-items: center;
+    justify-content: space-between;
+
 }
 
 .card {
