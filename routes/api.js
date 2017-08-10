@@ -179,7 +179,7 @@ router.get('/contents/:page'//require category, page
                 viewed: 1,
                 date: 1})
             .skip(req.params.page * 15)
-            .limit(15)
+            .limit(20)
             .exec((err, projects)=>{
                 if(err){
                     console.error(err);
