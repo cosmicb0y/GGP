@@ -34,26 +34,81 @@ $(document).ready(function () {
             var view = data.viewed; //temporary puts 0, it should modify later.
             var comments = data.commentCount;
 
-            $('.card-deck').append(
-                '                <div class="card">\n' +
-                "                    <div class=\"center-cropped\">\n" +
-                '                        <img class="card-img-top" src="http://chacham.xyz:3000/'+thumbnail+' " alt="Card image cap">\n' +
-                "                    </div>\n" +
-                "                    <div class=\"card-block\">\n" +
-                "                        <div class=\"row\" id=\"upperRow\">\n" +
-                '                            <div class="col-6" id="category">'+category+'</div>\n' +
-                '                            <div class="col-6" id="writer">'+writer+'</div>\n' +
-                "                        </div>\n" +
-                '                        <h4 class="card-title" id="name">'+name+'</h4>\n' +
-                '                        <p class="card-text" id="summary">'+summary+'</p>\n' +
-                "                        <div class=\"row\" id=\"lowerRow\">\n" +
-                '                            <div class="col-4" id="views">'+view+'</div>\n' +
-                '                            <div class="col-4" id="likes">'+likeCount+'</div>\n' +
-                '                            <div class="col-4" id="comments">'+comments+'</div>\n' +
-                "                        </div>\n" +
-                "                    </div>\n" +
-                "\n" +
-                "                </div>")
+            var card = document.createElement("div");
+            card.className = "card";
+
+            var centerCropped = document.createElement("div");
+            centerCropped.className = "center-cropped";
+
+            var cardImage = document.createElement("img");
+            cardImage.className = "card-image-top";
+            cardImage.setAttribute("src", "http://chacham.xyz:3000/"+thumbnail);
+            cardImage.setAttribute("alt", "Card image cap");
+
+            var cardBlock = document.createElement("div");
+            cardBlock.className = "card-block";
+
+            var upperRow = document.createElement("div");
+            upperRow.className = "row";
+            upperRow.setAttribute("id", "upperRow");
+
+            var categoryDiv = document.createElement("div");
+            categoryDiv.className = "col-6";
+            categoryDiv.setAttribute("id", "category");
+            categoryDiv.innerHTML = category;
+
+            var writerDiv = document.createElement("div");
+            writerDiv.className = "col-6";
+            writerDiv.setAttribute("id", "writer");
+            writerDiv.innerHTML = writer;
+
+            var cardTitle = document.createElement("h4");
+            cardTitle.className = "card-title";
+            cardTitle.setAttribute("id", "name");
+            cardTitle.innerHTML = name;
+
+            var cardText = document.createElement("p");
+            cardText.className = "card-text";
+            cardText.setAttribute("id", "summary");
+            cardText.innerHTML = summary;
+
+            var lowerRow = document.createElement("div");
+            lowerRow.className = "row";
+            lowerRow.setAttribute("id", "lowerRow");
+
+            var viewDiv = document.createElement("div");
+            viewDiv.className = "col-4";
+            viewDiv.setAttribute("id", "views");
+            viewDiv.innerHTML = view;
+
+            var likeDiv = document.createElement("div");
+            likeDiv.className = "col-4";
+            likeDiv.setAttribute("id", "likes");
+            likeDiv.innerHTML = likeCount;
+
+            var commentDiv = document.createElement("div");
+            commentDiv.className = "col-4";
+            commentDiv.setAttribute("id"," comments");
+            commentDiv.innerHTML = comments;
+
+            centerCropped.append(cardImage);
+
+            upperRow.append(categoryDiv);
+            upperRow.append(writerDiv);
+
+            lowerRow.append(viewDiv);
+            lowerRow.append(likeDiv);
+            lowerRow.append(commentDiv);
+
+            cardBlock.append(upperRow);
+            cardBlock.append(cardTitle);
+            cardBlock.append(cardText);
+            cardBlock.append(lowerRow);
+
+            card.append(centerCropped);
+            card.append(cardBlock);
+
+            $('.card-deck').append(card)
             .children().last().on( 'click', ()=>{window.location.href = '/api/project/' + data.id} );;
 
         });
@@ -73,6 +128,7 @@ $(window).scroll(function() {
             var items = [];
             if( ! data.success){
                 //Get Error??
+                --page;
             }
             $.each( data.projects, function( i, data ) {
                 var thumbnail = data.thumbnail;
@@ -84,29 +140,87 @@ $(window).scroll(function() {
                 var view = data.viewed; //temporary puts 0, it should modify later.
                 var comments = data.commentCount;
 
-                $('.card-deck').append(
-                    '                <div class="card">\n' +
-                    "                    <div class=\"center-cropped\">\n" +
-                    '                        <img class="card-img-top" src="http://chacham.xyz:3000/'+thumbnail+' " alt="Card image cap">\n' +
-                    "                    </div>\n" +
-                    "                    <div class=\"card-block\">\n" +
-                    "                        <div class=\"row\" id=\"upperRow\">\n" +
-                    '                            <div class="col-6" id="category">'+category+'</div>\n' +
-                    '                            <div class="col-6" id="writer">'+writer+'</div>\n' +
-                    "                        </div>\n" +
-                    '                        <h4 class="card-title" id="name">'+name+'</h4>\n' +
-                    '                        <p class="card-text" id="summary">'+summary+'</p>\n' +
-                    "                        <div class=\"row\" id=\"lowerRow\">\n" +
-                    '                            <div class="col-4" id="views">'+view+'</div>\n' +
-                    '                            <div class="col-4" id="likes">'+likeCount+'</div>\n' +
-                    '                            <div class="col-4" id="comments">'+comments+'</div>\n' +
-                    "                        </div>\n" +
-                    "                    </div>\n" +
-                    "\n" +
-                    "                </div>")
-                    .children().last().on( 'click', ()=>{window.location.href = '/api/project/' + data.id} );;
 
+                var card = document.createElement("div");
+                card.className = "card";
+
+                var centerCropped = document.createElement("div");
+                centerCropped.className = "center-cropped";
+
+                var cardImage = document.createElement("img");
+                cardImage.className = "card-image-top";
+                cardImage.setAttribute("src", "http://chacham.xyz:3000/"+thumbnail);
+                cardImage.setAttribute("alt", "Card image cap");
+
+                var cardBlock = document.createElement("div");
+                cardBlock.className = "card-block";
+
+                var upperRow = document.createElement("div");
+                upperRow.className = "row";
+                upperRow.setAttribute("id", "upperRow");
+
+                var categoryDiv = document.createElement("div");
+                categoryDiv.className = "col-6";
+                categoryDiv.setAttribute("id", "category");
+                categoryDiv.innerHTML = category;
+
+                var writerDiv = document.createElement("div");
+                writerDiv.className = "col-6";
+                writerDiv.setAttribute("id", "writer");
+                writerDiv.innerHTML = writer;
+
+                var cardTitle = document.createElement("h4");
+                cardTitle.className = "card-title";
+                cardTitle.setAttribute("id", "name");
+                cardTitle.innerHTML = name;
+
+                var cardText = document.createElement("p");
+                cardText.className = "card-text";
+                cardText.setAttribute("id", "summary");
+                cardText.innerHTML = summary;
+
+                var lowerRow = document.createElement("div");
+                lowerRow.className = "row";
+                lowerRow.setAttribute("id", "lowerRow");
+
+                var viewDiv = document.createElement("div");
+                viewDiv.className = "col-4";
+                viewDiv.setAttribute("id", "views");
+                viewDiv.innerHTML = view;
+
+                var likeDiv = document.createElement("div");
+                likeDiv.className = "col-4";
+                likeDiv.setAttribute("id", "likes");
+                likeDiv.innerHTML = likeCount;
+
+                var commentDiv = document.createElement("div");
+                commentDiv.className = "col-4";
+                commentDiv.setAttribute("id"," comments");
+                commentDiv.innerHTML = comments;
+
+                centerCropped.append(cardImage);
+
+                upperRow.append(categoryDiv);
+                upperRow.append(writerDiv);
+
+                lowerRow.append(viewDiv);
+                lowerRow.append(likeDiv);
+                lowerRow.append(commentDiv);
+
+                cardBlock.append(upperRow);
+                cardBlock.append(cardTitle);
+                cardBlock.append(cardText);
+                cardBlock.append(lowerRow);
+
+                card.append(centerCropped);
+                card.append(cardBlock);
+
+                $('.card-deck').append(card)
+                    .children().last().on( 'click', ()=>{window.location.href = '/api/project/' + data.id} );;
             });
+            if (data.projects.length < 20) {
+                $(window).off("scroll");
+            }
         });
     }
 });
