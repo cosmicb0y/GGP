@@ -10,6 +10,7 @@ var multer  = require('multer')
 var randomstring = require('randomstring');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
+const AtOnce = 20;
 
 /* Methods~~~ */
 function loggedinOrRedirectTo(to){
@@ -178,8 +179,8 @@ router.get('/contents/:page'//require category, page
                 //likedUser: 1,//Don't need now.
                 viewed: 1,
                 date: 1})
-            .skip(req.params.page * 15)
-            .limit(20)
+            .skip(req.params.page * AtOnce)
+            .limit(AtOnce)
             .exec((err, projects)=>{
                 if(err){
                     console.error(err);
